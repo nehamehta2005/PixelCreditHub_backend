@@ -37,12 +37,20 @@ mongoose
 app.use(morgan("tiny"));
 
 // cors middleware
-const origin =
-  process.env.NODE_ENV === "production"
-    ? "https://pixelcredithub.netlify.app"
-    : "http://localhost:5173";
+app.use((req, res, next) => {
+    const origin =
+      process.env.NODE_ENV === "production"
+        ? "https://pixelcredithub.netlify.app"
+        : "http://localhost:5173";
+        
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-app.use(cors({ origin, exposedHeaders: ["token"] }));
+    app.use(cors({ origin, exposedHeaders: ["token"] }));
+    next();
+});
+
 
 // app.use(cors({ origin: "http://127.0.0.1:5173", exposedHeaders: ["token"] }));
 
