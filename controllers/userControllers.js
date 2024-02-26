@@ -6,11 +6,6 @@ import nodemailer from "nodemailer";
 import { v4 as uuidv4 } from "uuid";
 import dotenv from "dotenv";
 dotenv.config();
-
-const baseURL =
-  process.env.NODE_ENV === 'production'
-    ? 'https://pixelcredithub.netlify.app'
-    : 'http://localhost:5500';
 //import { Readable } from "stream";
 
 // Function to send a verification email
@@ -54,7 +49,7 @@ export const login = async (req, res, next) => {
 
       if (check) {
         const profileImageUrl = foundUser.profileImage
-          ? `${baseURL}/profile/profile-image/${foundUser.profileImage.filename}`
+          ? `http://localhost:5500/profile/profile-image/${foundUser.profileImage.filename}`
           : null;
         const userProfileImageUrl = {
           ...foundUser.toObject(),
