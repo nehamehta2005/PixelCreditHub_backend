@@ -42,7 +42,9 @@ app.use((req, res, next) => {
       process.env.NODE_ENV === "production"
         ? "https://pixelcredithub.netlify.app"
         : "http://localhost:5173";
-        
+         console.log("NODE_ENV",process.env.NODE_ENV );
+         console.log("origin", origin)
+
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
