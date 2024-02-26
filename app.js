@@ -25,7 +25,6 @@ app.use(express.json());
 app.use(express.static("./views/dist"));
 app.use(fileUpload());
 app.use(express.urlencoded({ extended: true }));
-app.use(morgan("tiny"));
 
 // connect to MongoDB through mongoose
 mongoose
@@ -34,23 +33,16 @@ mongoose
   .then(() => console.log("We connected to DB 😉"))
   .catch((err) => console.log(err));
 
- 
+// middleware morgan
 
-
-/* // cors middleware
+// cors middleware
 const origin =
   process.env.NODE_ENV === "production"
-    ? "http://localhost:4173"
+    ? "https://pixelcredithub.netlify.app"
     : "http://localhost:5173";
 
-app.use(cors({ origin, exposedHeaders: ["token"] })); */
+app.use(cors({ origin, exposedHeaders: ["token"] }));
 
-// CORS middleware
-const corsOptions = {
-  origin: process.env.NODE_ENV === "production" ? "https://pixelcredithub.netlify.app" : "http://localhost:5173",
-  exposedHeaders: ["token"]
-};
-app.use(cors(corsOptions));
 // app.use(cors({ origin: "http://127.0.0.1:5173", exposedHeaders: ["token"] }));
 
 // localhost:5500/users
