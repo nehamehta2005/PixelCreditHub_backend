@@ -34,11 +34,12 @@ mongoose
   .catch((err) => console.log(err));
 
 // middleware morgan
+app.use(morgan("tiny"));
 
 // cors middleware
 const origin =
   process.env.NODE_ENV === "production"
-    ? "https://pixelcredithub.netlify.app"
+    ? "http://localhost:4173"
     : "http://localhost:5173";
 
 app.use(cors({ origin, exposedHeaders: ["token"] }));
