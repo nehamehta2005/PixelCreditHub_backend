@@ -39,7 +39,7 @@ app.use(morgan("tiny"));
 // cors middleware
 const origin =
   process.env.NODE_ENV === "production"
-    ? "http://localhost:4173"
+    ? "https://pixelcredithub.netlify.app"
     : "http://localhost:5173";
 
 app.use(cors({ origin, exposedHeaders: ["token"] }));
