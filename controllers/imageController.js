@@ -4,6 +4,11 @@ import Upload from "../models/uploadSchema.js";
 import { Readable } from "stream";
 import sharp from "sharp";
 
+const baseURL =
+  process.env.NODE_ENV === "production"
+    ? "https://pixelcredithub-backend.onrender.com"
+    : "http://localhost:5500";
+
 //import fileUpload from "express-fileupload";
 
 export const uploadImages = async (req, res, next) => {
@@ -35,7 +40,8 @@ export const uploadImages = async (req, res, next) => {
       fileName: uniqueFilename,
       fileSize: resizedImageBuffer.length, //uploadedFile.size,
       data: resizedImageBuffer, //uploadedFile.data,
-      imageURL: `http://localhost:5500/images/allimages/${uniqueFilename}`,
+      // Use baseURL when constructing imageURL
+      imageURL: `${baseURL}/images/allimages/${uniqueFilename}`,
       tags: tags.split(" "),
       categories: categories.split(" "),
     });
@@ -151,26 +157,23 @@ export const getSearchedImages = async (req, res, next) => {
   }
 };
 
-
 export const singleImage = async (req, res, next) => {
-   
-/*   const singleMember = await Member.findOne({name:req.params.singlemember});*/
-  console.log(req.params ) 
+  /*   const singleMember = await Member.findOne({name:req.params.singlemember});*/
+  console.log(req.params);
 
   try {
-
     const imageId = req.params.filename;
     const result = await Upload.findOne({ fileName: imageId });
 
     if (!result || !result.data) {
-      res.status(404).send('Image not found');
+      res.status(404).send("Image not found");
       return;
     }
 
-    const imageBuffer = Buffer.from(result.data, 'base64');
+    const imageBuffer = Buffer.from(result.data, "base64");
 
-    res.contentType('image/png');
-    res.setHeader('Content-Disposition', `attachment; filename=${imageId}.png`);
+    res.contentType("image/png");
+    res.setHeader("Content-Disposition", `attachment; filename=${imageId}.png`);
     res.send(imageBuffer);
     /* const singleMember = await Member.findOne({
       name: capitalize(req.params.singlemember)
@@ -188,12 +191,9 @@ export const singleImage = async (req, res, next) => {
   }
 };
 
-
 export const updateLikes = async (req, res, next) => {
-  console.log(req.body)
+  console.log(req.body);
   try {
-    console.log("like it")
-  } catch (error) {
-    
-  }
-}
+    console.log("like it");
+  } catch (error) {}
+};

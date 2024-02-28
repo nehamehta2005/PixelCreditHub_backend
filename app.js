@@ -28,8 +28,10 @@ app.use(express.urlencoded({ extended: true }));
 
 // connect to MongoDB through mongoose
 mongoose
- //.connect("mongodb://localhost:27017/PixelCreditHub")
-  .connect(`mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.woouwqc.mongodb.net/PixelCreditHub`)
+  //.connect("mongodb://localhost:27017/PixelCreditHub")
+  .connect(
+    `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.woouwqc.mongodb.net/PixelCreditHub` 
+  )
   .then(() => console.log("We connected to DB 😉"))
   .catch((err) => console.log(err));
 
@@ -37,7 +39,7 @@ mongoose
 app.use(morgan("tiny"));
 
 // cors middleware
-app.use((req, res, next) => {
+/* app.use((req, res, next) => {
   const origin =
     process.env.NODE_ENV === "production"
       ? "https://pixelcredithub.netlify.app"
@@ -49,7 +51,17 @@ app.use((req, res, next) => {
 
   app.use(cors({ origin, exposedHeaders: ["token"] }));
   next();
-});
+}); */
+
+let allowUrls = "*";
+
+app.use(
+  cors({
+    origin: allowUrls,
+    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT"],
+    credentials: true,
+  })
+);
 
 // localhost:5500/users
 app.use("/users", usersRouter);
