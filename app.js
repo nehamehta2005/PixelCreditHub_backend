@@ -46,7 +46,7 @@ app.use(morgan("tiny"));
       : "http://localhost:5173";
 
   res.setHeader('Access-Control-Allow-Origin', origin);
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   app.use(cors({ origin, exposedHeaders: ["token"] }));
