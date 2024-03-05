@@ -1,6 +1,6 @@
 import User from "../models/userSchema.js";
 import { Readable } from "stream";
-
+import baseURL from '../config/baseURL.js';
 //`http://localhost:5500/profile/profile-image/${foundUser.profileImage.filename}
 
 export const getUserProfileImage = async (req, res, next) => {
@@ -32,7 +32,7 @@ export const updateProfileImage = async (req, res, next) => {
 
     const { name, data } = req.files.profileImage;
     const timestamp = Date.now();
-    const profileImageUrl = `http://localhost:5500/profile/profile-image/${name}?t=${timestamp}`;
+    const profileImageUrl = `${baseURL}/profile/profile-image/${name}?t=${timestamp}`;
 
     const result = await User.findByIdAndUpdate(userId, {
       $set: {

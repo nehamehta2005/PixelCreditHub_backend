@@ -3,11 +3,8 @@ import MemberImage from "../models/memberImageSchema.js";
 import Upload from "../models/uploadSchema.js";
 import { Readable } from "stream";
 import sharp from "sharp";
-
-const baseURL =
-  process.env.NODE_ENV === "production"
-    ? "https://pixelcredithub-backend.onrender.com"
-    : "http://localhost:5500";
+import baseURL from '../config/baseURL.js';
+ 
 
 //import fileUpload from "express-fileupload";
 
