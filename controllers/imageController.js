@@ -145,7 +145,7 @@ export const getAllImages = async (req, res, next) => {
     next(error);
   }
 };
- 
+
 //this code is serving images back to client
 export const getMemberImage = async (req, res, next) => {
   try {
