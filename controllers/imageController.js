@@ -2,14 +2,14 @@ import { v4 as uuidv4 } from "uuid";
 import MemberImage from "../models/memberImageSchema.js";
 import Upload from "../models/uploadSchema.js";
 import { Readable } from "stream";
-import fs from 'fs';
-import path from 'path';
-//import sharp from "sharp";
+//import fs from 'fs';
+//import path from 'path';
+import sharp from "sharp";
 import baseURL from '../config/baseURL.js';
  
 
 //import fileUpload from "express-fileupload";
-export const uploadImages = async (req, res, next) => {
+/* export const uploadImages = async (req, res, next) => {
   try {
     if (!req.files || Object.keys(req.files).length === 0) {
       return res.status(400).send("No files were uploaded.");
@@ -58,9 +58,9 @@ export const uploadImages = async (req, res, next) => {
     next(error);
   }
 };
+ */
 
-
-/* export const uploadImages = async (req, res, next) => {
+ export const uploadImages = async (req, res, next) => {
   try {
     console.log("Tags and Categories:", req.body.tags, req.body.categories);
 
@@ -102,13 +102,13 @@ export const uploadImages = async (req, res, next) => {
     console.error("Error in uploadImages controller:", error);
     next(error);
   }
-}; */
+}; 
 
 
 //this code is serving images back to client
 
 
-export const getAllImages = async (req, res, next) => {
+/* export const getAllImages = async (req, res, next) => {
   try {
     const filename = req.params.filename;
     const imagePath = path.join(__dirname, 'uploadedImages', filename);
@@ -127,10 +127,10 @@ export const getAllImages = async (req, res, next) => {
     res.status(500).send("Error fetching image");
     next(error);
   }
-};
+}; */
 
 
-/* export const getAllImages = async (req, res, next) => {
+export const getAllImages = async (req, res, next) => {
   //console.log(req.params.filename);
   try {
     const image = await Upload.findOne({ fileName: req.params.filename });
@@ -145,7 +145,7 @@ export const getAllImages = async (req, res, next) => {
     next(error);
   }
 };
- */
+ 
 //this code is serving images back to client
 export const getMemberImage = async (req, res, next) => {
   try {
@@ -175,6 +175,7 @@ export const getAllUploadedImages = async (req, res, next) => {
 
 // approveUpload in the database | Status: "approved";
 export const approveUpload = async (req, res, next) => {
+  console.log("hi from here")
   const uploadId = req.params.id;
   console.log(req.params);
   try {
