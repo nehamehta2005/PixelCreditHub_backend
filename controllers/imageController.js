@@ -2,13 +2,65 @@ import { v4 as uuidv4 } from "uuid";
 import MemberImage from "../models/memberImageSchema.js";
 import Upload from "../models/uploadSchema.js";
 import { Readable } from "stream";
-import sharp from "sharp";
+import fs from 'fs';
+import path from 'path';
+//import sharp from "sharp";
 import baseURL from '../config/baseURL.js';
  
 
 //import fileUpload from "express-fileupload";
-
 export const uploadImages = async (req, res, next) => {
+  try {
+    if (!req.files || Object.keys(req.files).length === 0) {
+      return res.status(400).send("No files were uploaded.");
+    }
+    
+    const uploadedFiles = Array.isArray(req.files.foo) ? req.files.foo : [req.files.foo];
+    
+    // Directory to save uploaded images
+    const uploadDirectory = path.join(__dirname, 'uploadedImages'); 
+    if (!fs.existsSync(uploadDirectory)) {
+      fs.mkdirSync(uploadDirectory, { recursive: true });
+    }
+
+    for (const uploadedFile of uploadedFiles) {
+      const timestamp = Date.now();
+      const uniqueFilename = `${timestamp}-${uuidv4()}`;
+      const filePath = path.join(uploadDirectory, uniqueFilename);
+
+      // Save the image file to the uploads directory
+      uploadedFile.mv(filePath, err => {
+        if (err) {
+          console.error("Error saving file:", err);
+          throw err;
+        }
+      });
+
+      const tags = req.body.tags;
+      const categories = req.body.categories;
+      const imageURL = `${baseURL}/uploadedImages/${uniqueFilename}`;
+
+      // Create a new Upload instance and save it to the database
+      const image = new Upload({
+        fileName: uniqueFilename,
+        fileSize: uploadedFile.size,
+        imageURL: imageURL,
+        tags: tags.split(" "),
+        categories: categories.split(" "),
+      });
+
+      await image.save();
+    }
+
+    res.send("Files uploaded successfully");
+  } catch (error) {
+    console.error("Error in uploadImages controller:", error);
+    next(error);
+  }
+};
+
+
+/* export const uploadImages = async (req, res, next) => {
   try {
     console.log("Tags and Categories:", req.body.tags, req.body.categories);
 
@@ -50,10 +102,35 @@ export const uploadImages = async (req, res, next) => {
     console.error("Error in uploadImages controller:", error);
     next(error);
   }
-};
+}; */
+
 
 //this code is serving images back to client
+
+
 export const getAllImages = async (req, res, next) => {
+  try {
+    const filename = req.params.filename;
+    const imagePath = path.join(__dirname, 'uploadedImages', filename);
+
+    // Check if the file exists
+    if (fs.existsSync(imagePath)) {
+      // Send the file as a response
+      res.sendFile(imagePath);
+    } else {
+      // If the file does not exist, send a 404 error
+      res.status(404).send("Image not found");
+    }
+  } catch (error) {
+    // Handle errors
+    console.error("Error fetching image:", error);
+    res.status(500).send("Error fetching image");
+    next(error);
+  }
+};
+
+
+/* export const getAllImages = async (req, res, next) => {
   //console.log(req.params.filename);
   try {
     const image = await Upload.findOne({ fileName: req.params.filename });
@@ -68,7 +145,7 @@ export const getAllImages = async (req, res, next) => {
     next(error);
   }
 };
-
+ */
 //this code is serving images back to client
 export const getMemberImage = async (req, res, next) => {
   try {
